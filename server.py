@@ -11,7 +11,7 @@ import json
 
 
 def gen_secret_key():
-    secret_key = random.random()
+    secret_key = str(random.random())[2:]
     return secret_key
 
 
@@ -25,23 +25,19 @@ def create_secret_key(db, name):
 def save_user(db, form):
     name = form["name"]
     password = form["password"]
-    print("DB: ", db["users"], "   Name: ", name, "    Password: ", password)
     if name in db["users"].keys():
         raise "Name in base."
     else:
         db["users"][name] = password
         return create_secret_key(db, name)
-        #return "User registed."
 
 
 def login_user(db, form):
     name = form["name"]
     password = form["password"]
-    print("User ", name, " loggining in!")
     if name in db["users"].keys():
         if password == db["users"][name]:
             return create_secret_key(db, name)
-            #return "User login."
         else:
             raise WrongPass("Wrong password.")
     else:
@@ -53,27 +49,18 @@ def save_result(db, form):
     result = form["result"]
     secret_key = form["secret_key"]
 
-    if secret_key == str(db["users_secret_key"][name]):
-       
-        print("Saving result!")
-    
+    if secret_key == str(db["users_secret_key"][name]):   
         db["results"][name] = int(result)
-    
-        print("Now ", name, " have result: ", db["results"][name])
-        print(db["results"])
         return db["results"]
-        #return "All ok! Secret key: %s" % secret_key
     else:
         raise SecretKeyWrong("Secret key is wrong!")
 
 
 def get_result(db, form):
-    #print(db["results"])
     return db["results"]
 
 def secret_key_name(db, form):
     name = form["name"]
-    #print("Name: ", name, "    Secret key: ", db["users_secret_key"][name])
     return db["users_secret_key"]
 
 
@@ -140,53 +127,33 @@ class HttpHandler(CGIHTTPRequestHandler):
         try:
             content_length = int(self.headers['Content-Length']) 
             post_data = self.rfile.read(content_length)
-
-            #print(post_data)
-
-            post_data = post_data.decode("utf-8")
-
-            #print(post_data)
-            
+            post_data = post_data.decode("utf-8")    
             form = json.loads(post_data)
-
-            print(form)
-            #print(type(form))
-            
-            '''
-            form = cgi.FieldStorage(
-                fp=self.rfile,
-                headers=self.headers,
-                environ={"REQUEST_METHOD": "POST"}
-            )
-            '''
             
             request_type = form["type"] #request_type
 
-            answer = 0
+            response = 0
             
             if request_type in request_settings.keys():
-                answer = request_settings[request_type](my_db, form)
+                response = request_settings[request_type](my_db, form)
             else:
                 raise "Requset type not register! Something went wrong!"
 
 
             print("This form: ", form,\
-                "Reques type: ", request_type,\
-                "Answer: ", answer)
-
-            #print("Answer: ", answer)
-
-            #print("Answer: ", answer)
-
-            #for item in form.list:
-            #    print (item.name, "=", item.value)
-
-            #print(my_db)
+                "  Reques type: ", request_type,\
+                "  Answer: ", response)
             
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+
+            response = json.dumps(response).encode("utf-8")
+            
+            self.wfile.write(response)         
         except:
             for item in traceback.format_exception(*sys.exc_info()):
                 print(item)
-            #print("Something went wrong!", sys.exc_info()[0])
             self.send_error(500)
 
         
