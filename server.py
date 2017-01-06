@@ -15,6 +15,13 @@ def gen_secret_key():
     return secret_key
 
 
+def create_secret_key(db, name):
+    secret_key = gen_secret_key()
+    db["users_secret_key"][name] = secret_key
+    return {"secret_key": secret_key}
+
+
+
 def save_user(db, form):
     name = form["name"].value
     password = form["password"].value
@@ -23,7 +30,7 @@ def save_user(db, form):
         raise "Name in base."
     else:
         db["users"][name] = password
-        return 1
+        return create_secret_key(db, name)
         #return "User registed."
 
 
@@ -33,8 +40,7 @@ def login_user(db, form):
     print("User ", name, " loggining in!")
     if name in db["users"].keys():
         if password == db["users"][name]:
-            db["users_secret_key"][name] = gen_secret_key()
-            return 1
+            return create_secret_key(db, name)
             #return "User login."
         else:
             raise WrongPass("Wrong password.")
@@ -55,18 +61,20 @@ def save_result(db, form):
     
         print("Now ", name, " have result: ", db["results"][name])
         print(db["results"])
-        return 1
+        return db["results"]
         #return "All ok! Secret key: %s" % secret_key
     else:
         raise SecretKeyWrong("Secret key is wrong!")
 
 
 def get_result(db, form):
-    print(db["results"])
+    #print(db["results"])
+    return db["results"]
 
 def secret_key_name(db, form):
     name = form["name"].value
-    print("Name: ", name, "    Secret key: ", db["users_secret_key"][name])
+    #print("Name: ", name, "    Secret key: ", db["users_secret_key"][name])
+    return db["users_secret_key"]
 
 
 
@@ -143,8 +151,9 @@ class HttpHandler(CGIHTTPRequestHandler):
                 raise "Requset type not register! Something went wrong!"
 
 
-            if answer == 1:
-                print("All ok!")
+            print("Request type: ", request_type)
+
+            print("Answer: ", answer)
 
             #print("Answer: ", answer)
 
