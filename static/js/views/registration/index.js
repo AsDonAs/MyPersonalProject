@@ -8,7 +8,7 @@ function RegistrationView() {
 
   this.onRegistrationCallback = null;
 
-
+  this.userName = null;
 }
 
 RegistrationView.prototype.setOnRegistration = function(callback) {
@@ -67,6 +67,9 @@ RegistrationView.prototype._setEvents = function() {
   });
 };
 
+
+// request_settings = {"0": save_user, "1": login_user, "2": save_result,\
+// "4": get_result, "9": secret_key_name}
 RegistrationView.prototype._onClickActionButton = function(optionName) {
   console.log('click button', optionName);
 
@@ -103,6 +106,8 @@ RegistrationView.prototype._onClickActionButton = function(optionName) {
     return;
   }
 
+  this.userName = formData.loginName;
+
   this.$el.find('.waitingContainer').html('waiting...');
   this.isWaitingResponse = true;
 };
@@ -135,10 +140,10 @@ RegistrationView.prototype._collectAndClearFormData = function(optionName) {
   }, {});
 };
 
-RegistrationView.prototype._onResponse = function() {
+RegistrationView.prototype._onResponse = function(response) {
   this.isWaitingResponse = false;
   this.$el.find('.waitingContainer').html('');
   if (typeof this.onRegistrationCallback === 'function') {
-    this.onRegistrationCallback();
+    this.onRegistrationCallback(response.secret_key, this.userName);
   }
 };

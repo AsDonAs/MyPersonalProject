@@ -26,10 +26,10 @@ window.sendRequest = function(data, onSuccess, onError) {
     data: JSON.stringify(data),
     contentType: "application/json; charset=utf-8",
     dataType: "json",
-    success: function() {
+    success: function(data) {
       console.log('ajax request success');
       if (typeof onSuccess === 'function') {
-        onSuccess();
+        onSuccess(data);
       }
     },
     error: function() {
@@ -39,7 +39,10 @@ window.sendRequest = function(data, onSuccess, onError) {
   });
 };
 
-function onRegistration() {
+function onRegistration(secretKey, name) {
+  window.finderOfTwo.secretKey = secretKey;
+  window.finderOfTwo.name = name;
+
   var gameView = new GameView();
 
   gameView.render($('#content'));
@@ -51,6 +54,11 @@ function onRegistration() {
 
 function onEndGame(gameDurationMs) {
   alert('game ended ms: ' + gameDurationMs);
+  window.sendRequest({
+    name: window.finderOfTwo.name,
+    secret_key: window.finderOfTwo.secretKey,
+    result: gameDurationMs
+  });
 }
 
 // also delete from page
