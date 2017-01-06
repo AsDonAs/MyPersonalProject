@@ -82,7 +82,7 @@ RegistrationView.prototype._onClickActionButton = function(optionName) {
     }
 
     window.sendRequest({
-      type: 'registration',
+      type: '0',
       name: formData.registrationName,
       password: formData.registrationPassword
     }, this._onResponse);
@@ -93,7 +93,7 @@ RegistrationView.prototype._onClickActionButton = function(optionName) {
     }
 
     window.sendRequest({
-      type: 'registration',
+      type: '1',
       name: formData.loginName,
       password: formData.loginPassword
     }, this._onResponse);

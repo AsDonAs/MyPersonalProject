@@ -23,8 +23,8 @@ def create_secret_key(db, name):
 
 
 def save_user(db, form):
-    name = form["name"].value
-    password = form["password"].value
+    name = form["name"]
+    password = form["password"]
     print("DB: ", db["users"], "   Name: ", name, "    Password: ", password)
     if name in db["users"].keys():
         raise "Name in base."
@@ -35,8 +35,8 @@ def save_user(db, form):
 
 
 def login_user(db, form):
-    name = form["name"].value
-    password = form["password"].value
+    name = form["name"]
+    password = form["password"]
     print("User ", name, " loggining in!")
     if name in db["users"].keys():
         if password == db["users"][name]:
@@ -49,9 +49,9 @@ def login_user(db, form):
     
 
 def save_result(db, form):
-    name = form["name"].value
-    result = form["result"].value
-    secret_key = form["secret_key"].value
+    name = form["name"]
+    result = form["result"]
+    secret_key = form["secret_key"]
 
     if secret_key == str(db["users_secret_key"][name]):
        
@@ -72,7 +72,7 @@ def get_result(db, form):
     return db["results"]
 
 def secret_key_name(db, form):
-    name = form["name"].value
+    name = form["name"]
     #print("Name: ", name, "    Secret key: ", db["users_secret_key"][name])
     return db["users_secret_key"]
 
@@ -94,7 +94,7 @@ class HttpHandler(CGIHTTPRequestHandler):
     def do_GET(self):
         
         if self.path == "/":
-            self.path = "/static/index.html"
+            self.path = "/index.html"
             
         print("Self.path:  ", self.path, "You have GET send!")
         
@@ -122,7 +122,10 @@ class HttpHandler(CGIHTTPRequestHandler):
 
             if sendReply == True:
                 #Open the static file requested and send it
-                f = open(curdir + self.path, "rb") 
+                #print("This shit!: ", curdir + "/static" + self.path)
+                #print("Type curdir: ", type(curdir), "   Type self.path: ", type(self.path))
+                
+                f = open((curdir + "/static" + self.path), "rb") 
                 self.send_response(200)
                 self.send_header('Content-type',mimetype)
                 self.end_headers()
@@ -133,15 +136,31 @@ class HttpHandler(CGIHTTPRequestHandler):
 
     def do_POST(self):
         print("My POST request!")
-
+        
         try:
+            content_length = int(self.headers['Content-Length']) 
+            post_data = self.rfile.read(content_length)
+
+            #print(post_data)
+
+            post_data = post_data.decode("utf-8")
+
+            #print(post_data)
+            
+            form = json.loads(post_data)
+
+            print(form)
+            #print(type(form))
+            
+            '''
             form = cgi.FieldStorage(
                 fp=self.rfile,
                 headers=self.headers,
                 environ={"REQUEST_METHOD": "POST"}
             )
-
-            request_type = form["type"].value #request_type
+            '''
+            
+            request_type = form["type"] #request_type
 
             answer = 0
             
@@ -151,9 +170,11 @@ class HttpHandler(CGIHTTPRequestHandler):
                 raise "Requset type not register! Something went wrong!"
 
 
-            print("Request type: ", request_type)
+            print("This form: ", form,\
+                "Reques type: ", request_type,\
+                "Answer: ", answer)
 
-            print("Answer: ", answer)
+            #print("Answer: ", answer)
 
             #print("Answer: ", answer)
 

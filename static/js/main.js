@@ -22,7 +22,7 @@ window.sendRequest = function(data, onSuccess, onError) {
 
   $.ajax({
     type: 'POST',
-    url: '127.0.0.1',
+    url: '/',
     data: JSON.stringify(data),
     contentType: "application/json; charset=utf-8",
     dataType: "json",
