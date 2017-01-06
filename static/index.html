@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Finder of two</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="css/registration.css">
+</head>
+<body>
+<div id="app">
+    <div id="content"></div>
+</div>
+
+<script src="js/vendor/lodash.js"></script>
+<script src="js/vendor/jquery-3.1.1.min.js"></script>
+
+<script src="js/views/game/index.js"></script>
+<script src="js/views/registration/index.js"></script>
+<script src="js/main.js"></script>
+
+<!--TEMPLATES-->
+
+<div class="TEMPLATE" data-name="registration">
+    <div class="registrationContainer">
+        <div class="tabsContainer">
+            <ul>
+                <li class="menuOption noselect" data-action="registration">Регистрация</li>
+                <li class="menuOption noselect" data-action="login">Вход</li>
+            </ul>
+        </div>
+        <div class="registrationContent">
+            <div class="tabContent registration">
+                <table>
+                    <tr>
+                        <td><label for="registrationName">Имя:</label></td>
+                        <td><input class="registrationInput" type="text" id="registrationName"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="registrationPassword">Пароль:</label></td>
+                        <td><input class="registrationInput" type="text" id="registrationPassword"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="registrationRepeatPassword">Повторите пароль:</label></td>
+                        <td><input class="registrationInput" type="text" id="registrationRepeatPassword"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="buttonTd">
+                            <button class="actionButton" data-action="registration">Зарегистрироваться</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tabContent login">
+                <table>
+                    <tr>
+                        <td><label for="loginName">Имя:</label></td>
+                        <td><input class="loginInput" type="text" id="loginName"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="loginPassword">Пароль:</label></td>
+                        <td><input class="loginInput" type="text" id="loginPassword"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="buttonTd">
+                            <button class="actionButton" data-action="login">Войти</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="waitingContainer"></div>
+    </div>
+</div>
+
+<div class="TEMPLATE" data-name="game">
+    <div class="gameContainer">
+        <div class="heading">
+            <div class="title"><h1>Finder of two</h1></div>
+            <div class="timer">
+                <span class="timeValue">0</span>
+            </div>
+        </div>
+        <div class="gameContent">
+            <table class="noselect"></table>
+        </div>
+        <div class="info">
+            <p>
+                Игра автоматически завершится, когда будут найдены все пары.
+            </p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+.registrationContainer {
+    width: 600px;
+    margin: 100px auto;
+}
+
+.registrationContainer ul {
+    list-style-type: none;
+}
+
+.registrationContainer .menuOption {
+    display: inline-block;
+    cursor: pointer;
+    padding: 5px;
+    text-decoration: underline;
+    color: blue;
+}
+
+.registrationContainer .menuOption.selected {
+    cursor: default;
+    text-decoration: none;
+    color: black;
+}
+
+.registrationContainer .buttonTd {
+    text-align: center;
+}
+
+.registrationContainer .buttonTd button {
+    font-size: 1.1em;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.registrationContainer table {
+    width: 100%;
+}
+
+.registrationContainer .tabsContainer {
+    text-align: center;
+}
