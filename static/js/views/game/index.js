@@ -183,7 +183,7 @@ GameView.prototype.render = function($container) {
 
 // size is array [width, height]
 GameView.prototype.generateGameField = function(size) {
-  var gameField = generateEmptyField(size);
+//  var gameField = generateEmptyField(size);
 
   var totalCells = size[0] * size[1];
 
@@ -197,7 +197,21 @@ GameView.prototype.generateGameField = function(size) {
     return console.error('cant generate field of', halfCells, 'different images', 'max images', this.MAX_DIFFERENT_IMAGES);
   }
 
+  gameField = [];
+
+  field = window.finderOfTwo.field;
+  
+  for (var i = 0; i < size[1]; ++i) {
+    gameField[i] = []
+    for (var j = 0; j < size[0]; j++) {
+      gameField[i].push(field[j + i * size[0]])
+    }
+
+  }
+
+/*
   var imagesIds = _.range(this.MAX_DIFFERENT_IMAGES);
+
 
   var allPossiblePositions = _.range(totalCells);
 
@@ -213,14 +227,14 @@ GameView.prototype.generateGameField = function(size) {
     gameField[coordinates1[0]][coordinates1[1]] = imageId;
     gameField[coordinates2[0]][coordinates2[1]] = imageId;
   }
-
+*/
   return gameField;
 
   function getCellCoordinatesByOrderNumber(number, fieldSize) {
     // [y, x]
     return [number / fieldSize[0] ^ 0, number % fieldSize[0]];
   }
-
+/*
   function generateEmptyField(size) {
     var field = [];
 
@@ -233,7 +247,7 @@ GameView.prototype.generateGameField = function(size) {
 
     return field;
   }
-
+*/
   function takeRandomFromArray(array) {
     var randomIndex = _.random(0, array.length - 1);
     var item = array[randomIndex];

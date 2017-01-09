@@ -39,10 +39,11 @@ window.sendRequest = function(data, onSuccess, onError) {
   });
 };
 
-function onRegistration(secretKey, name) {
+function onRegistration(secretKey, field, name) {
   window.finderOfTwo.secretKey = secretKey;
   window.finderOfTwo.name = name;
-
+  window.finderOfTwo.field = field;
+ 
   var gameView = new GameView();
 
   gameView.render($('#content'));
@@ -55,6 +56,7 @@ function onRegistration(secretKey, name) {
 function onEndGame(gameDurationMs) {
   alert('game ended ms: ' + gameDurationMs);
   window.sendRequest({
+  	type: '2',
     name: window.finderOfTwo.name,
     secret_key: window.finderOfTwo.secretKey,
     result: gameDurationMs

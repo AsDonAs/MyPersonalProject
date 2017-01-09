@@ -18,7 +18,36 @@ def gen_secret_key():
 def create_secret_key(db, name):
     secret_key = gen_secret_key()
     db["users_secret_key"][name] = secret_key
-    return {"secret_key": secret_key}
+    field = gen_field(5, 4)
+    return {"secret_key": secret_key, "field": field}
+
+
+def gen_help_for_field(field_x, field_y):
+    help_field = ["-" for i in range(field_x * field_y)]
+    return help_field
+
+
+def gen_items_for_field(max_item_field):
+    items_field = [i for i in range(max_item_field)] * 2
+    return items_field
+
+
+def gen_field(field_x, field_y):
+    end_field = gen_help_for_field(field_x, field_y)
+    num_items = field_x * field_y
+
+    if num_items % 2 == 1:
+        raise "Bad len of field!"
+    else:
+        this_items = gen_items_for_field(num_items//2)
+        
+        for i in range(field_x * field_y):
+            item_num = random.randint(0, (len(this_items)-1))
+            end_field[i] = this_items[item_num]
+            del(this_items[item_num])
+
+        return end_field
+
 
 
 

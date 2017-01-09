@@ -144,6 +144,6 @@ RegistrationView.prototype._onResponse = function(response) {
   this.isWaitingResponse = false;
   this.$el.find('.waitingContainer').html('');
   if (typeof this.onRegistrationCallback === 'function') {
-    this.onRegistrationCallback(response.secret_key, this.userName);
+    this.onRegistrationCallback(response.secret_key, response.field, this.userName);
   }
 };
