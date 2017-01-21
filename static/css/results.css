@@ -1,0 +1,24 @@
+.resultsContainer {
+    margin-top: 150px;
+}
+
+.resultsContainer .heading {
+    text-align: center;
+}
+
+.resultsContainer .resultsContent table {
+    margin: 0 auto;
+    border: 1px solid black;
+    padding: 15px;
+}
+
+.resultsContainer .resultsContent table td {
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.resultsContainer .resultsCell {
+    border: 1px solid white;
+}

@@ -2,6 +2,7 @@ $(function() {
   window.finderOfTwo = {
     templates: loadTemplates()
   };
+
   var registration = new RegistrationView();
 
   registration.render($('#content'));
@@ -51,7 +52,7 @@ function onRegistration(secretKey, field, name) {
   gameView.start();
 
   gameView.setEndGameCallback(onEndGame);
-}
+};
 
 function onEndGame(gameDurationMs) {
   alert('game ended ms: ' + gameDurationMs);
@@ -61,7 +62,17 @@ function onEndGame(gameDurationMs) {
     secret_key: window.finderOfTwo.secretKey,
     result: gameDurationMs
   });
-}
+
+  var results = new ResultsView();
+
+  results.afterEndGame();
+  
+  results.setOnResults(onSaveResults);
+};
+
+function onSaveResults(results_top) {
+  window.finderOfTwo.results_top = results_top;
+};
 
 // also delete from page
 function loadTemplates() {

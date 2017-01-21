@@ -7,7 +7,7 @@ function GameView() {
 
   this.FIELD_SIZE = [5, 4];
 
-  this.CELL_SHOW_TIME_MS = 3000;
+  this.CELL_SHOW_TIME_MS = 1000;
 
   this.TOTAL_PAIRS = this.FIELD_SIZE[0] * this.FIELD_SIZE[1] / 2;
 

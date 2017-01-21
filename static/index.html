@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/game.css">
     <link rel="stylesheet" href="css/registration.css">
+    <link rel="stylesheet" href="css/results.css">
 </head>
 <body>
 <div id="app">
@@ -15,6 +16,7 @@
 <script src="js/vendor/lodash.js"></script>
 <script src="js/vendor/jquery-3.1.1.min.js"></script>
 
+<script src="js/views/results/index.js"></script>
 <script src="js/views/game/index.js"></script>
 <script src="js/views/registration/index.js"></script>
 <script src="js/main.js"></script>
@@ -90,6 +92,19 @@
             </p>
         </div>
     </div>
+</div>
+
+<div class="TEMPLATE" data-name="results">
+	<div class="resultsContainer">
+		<div class="heading">
+			<div class="title">
+				<h1> Top results </h1>
+			</div>
+		</div>
+		<div class="resultsContent">
+			<table class="noselect"> </table>
+		</div>
+	</div>
 </div>
 
 </body>

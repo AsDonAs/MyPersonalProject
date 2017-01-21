@@ -8,6 +8,7 @@ import sys
 import traceback
 import random
 import json
+from python_mysql_connect import *
 
 
 def gen_secret_key():
@@ -15,9 +16,9 @@ def gen_secret_key():
     return secret_key
 
 
-def create_secret_key(db, name):
+def create_secret_key(name):
     secret_key = gen_secret_key()
-    db["users_secret_key"][name] = secret_key
+    update_secret_key(name, secret_key)
     field = gen_field(5, 4)
     return {"secret_key": secret_key, "field": field}
 
@@ -51,40 +52,44 @@ def gen_field(field_x, field_y):
 
 
 
-def save_user(db, form):
+def save_user(form):
     name = form["name"]
     password = form["password"]
-    if name in db["users"].keys():
+    if user_in_db(name):
         raise "Name in base."
     else:
-        db["users"][name] = password
-        return create_secret_key(db, name)
+        add_new_db_user(name, password, "None")
+        return create_secret_key(name)
 
 
-def login_user(db, form):
+def login_user(form):
     name = form["name"]
     password = form["password"]
-    if name in db["users"].keys():
-        if password == db["users"][name]:
-            return create_secret_key(db, name)
+    if user_in_db(name):
+        if password == user_pass_in_db(name):
+            return create_secret_key(name)
         else:
             raise WrongPass("Wrong password.")
     else:
         raise UserNotRegister("User not register.")
     
 
-def save_result(db, form):
+def save_result(form):
     name = form["name"]
     result = form["result"]
     secret_key = form["secret_key"]
 
-    if secret_key == str(db["users_secret_key"][name]):   
-        db["results"][name] = int(result)
-        return db["results"]
+    if secret_key == user_sec_key_in_db(name):   
+        add_new_result(name, result)
+        return print_db_results()
     else:
         raise SecretKeyWrong("Secret key is wrong!")
 
 
+def get_result(form):
+    return {"results_top": top_results_in_db(10)}
+
+'''
 def get_result(db, form):
     return db["results"]
 
@@ -98,10 +103,10 @@ my_db = {}
 my_db["users"] = {}
 my_db["results"] = {}
 my_db["users_secret_key"] = {}
+'''
 
-
-request_settings = {"0": save_user, "1": login_user, "2": save_result,\
-                    "4": get_result, "9": secret_key_name}
+request_settings = {"0": save_user, "1": login_user, "2": save_result, "4": get_result}#,\
+#                    "4": get_result, "9": secret_key_name}
 
 
 curdir = os.path.dirname(os.path.abspath(__file__))
@@ -164,7 +169,7 @@ class HttpHandler(CGIHTTPRequestHandler):
             response = 0
             
             if request_type in request_settings.keys():
-                response = request_settings[request_type](my_db, form)
+                response = request_settings[request_type](form)
             else:
                 raise "Requset type not register! Something went wrong!"
 
