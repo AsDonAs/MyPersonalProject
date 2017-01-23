@@ -44,7 +44,12 @@ ResultsView.prototype.render = function($container) {
   $table.html('');
 
   for (var i = 0; i < this.RESULTS_SIZE[1]; ++i) {
-    var $tr = $('<tr></tr>');
+    if (window.finderOfTwo.user_name === resultsField[i][1]) {
+      var $tr = $('<tr class="userResult"></tr>');
+    }
+    else {
+      var $tr = $('<tr></tr>');
+    }
 
     for (var j = 0; j < this.RESULTS_SIZE[0]; ++j) {
       var $td = $('<td class="resultsCell"></td>');
@@ -57,8 +62,9 @@ ResultsView.prototype.render = function($container) {
       $tr.append($td);
     }
 
-    $table.append($tr);
+     $table.append($tr);
   }
+  
 
   $container.html(this.$el);
 };
@@ -102,11 +108,9 @@ ResultsView.prototype.GenField = function(size) {
 
 ResultsView.prototype._onResponse = function(response) {
   this.isWaitingResponse = false;
-  console.log(1);
 //  this.$el.find('.waitingContainer').html('');
   if (typeof this.onResultsCallback === 'function') {
     this.onResultsCallback(response.results_top);
-    console.log(2);
     this.showResults(window.finderOfTwo.results_top);
   }
 };

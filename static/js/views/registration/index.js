@@ -91,6 +91,7 @@ RegistrationView.prototype._onClickActionButton = function(optionName) {
     }, this._onResponse);
 
     this.userName = formData.registrationName;
+    window.finderOfTwo.user_name = this.userName;
   }
   else if (optionName === 'login') {
     if (!formData.loginName || !formData.loginPassword) {
@@ -104,6 +105,7 @@ RegistrationView.prototype._onClickActionButton = function(optionName) {
     }, this._onResponse);
 
     this.userName = formData.loginName;
+    window.finderOfTwo.user_name = this.userName;
   }
   else {
     console.error('unknown button action', optionName);
@@ -144,10 +146,8 @@ RegistrationView.prototype._collectAndClearFormData = function(optionName) {
 
 RegistrationView.prototype._onResponse = function(response) {
   this.isWaitingResponse = false;
-  console.log("Answer");
   this.$el.find('.waitingContainer').html('');
   if (typeof this.onRegistrationCallback === 'function') {
     this.onRegistrationCallback(response.secret_key, response.field, this.userName);
-    console.log("Answer2");
   }
 };

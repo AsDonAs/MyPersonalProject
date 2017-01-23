@@ -22,3 +22,8 @@
 .resultsContainer .resultsCell {
     border: 1px solid white;
 }
+
+.resultsContainer .userResult {
+    border: 1px solid white;
+    color: red;
+}
