@@ -136,7 +136,7 @@ GameView.prototype._selectCell = function(coordinates, cellIndex, $cell) {
 
 GameView.prototype._getSelectedCellIndex = function() {
   var now = Date.now();
-
+  
   // if second cell is selected - wait for it to disappear even if selectedCells[0] in clear
   if (this.selectedCells[1]) {
     var cell2EndTime = this.selectedCells[1].ts + this.CELL_SHOW_TIME_MS;
@@ -183,8 +183,6 @@ GameView.prototype.render = function($container) {
 
 // size is array [width, height]
 GameView.prototype.generateGameField = function(size) {
-//  var gameField = generateEmptyField(size);
-
   var totalCells = size[0] * size[1];
 
   if (totalCells % 2 !== 0) {
@@ -198,7 +196,6 @@ GameView.prototype.generateGameField = function(size) {
   }
 
   gameField = [];
-
   field = window.finderOfTwo.field;
   
   for (var i = 0; i < size[1]; ++i) {
@@ -206,52 +203,7 @@ GameView.prototype.generateGameField = function(size) {
     for (var j = 0; j < size[0]; j++) {
       gameField[i].push(field[j + i * size[0]])
     }
-
   }
 
-/*
-  var imagesIds = _.range(this.MAX_DIFFERENT_IMAGES);
-
-
-  var allPossiblePositions = _.range(totalCells);
-
-  for (var i = 0; i < halfCells; ++i) {
-    var imageId = takeRandomFromArray(imagesIds);
-
-    var position1 = takeRandomFromArray(allPossiblePositions);
-    var position2 = takeRandomFromArray(allPossiblePositions);
-
-    var coordinates1 = getCellCoordinatesByOrderNumber(position1, size);
-    var coordinates2 = getCellCoordinatesByOrderNumber(position2, size);
-
-    gameField[coordinates1[0]][coordinates1[1]] = imageId;
-    gameField[coordinates2[0]][coordinates2[1]] = imageId;
-  }
-*/
   return gameField;
-
-  function getCellCoordinatesByOrderNumber(number, fieldSize) {
-    // [y, x]
-    return [number / fieldSize[0] ^ 0, number % fieldSize[0]];
-  }
-/*
-  function generateEmptyField(size) {
-    var field = [];
-
-    for (var i = 0; i < size[1]; ++i) {
-      field[i] = [];
-      for (var j = 0; j < size[0]; ++j) {
-        field[i].push(null);
-      }
-    }
-
-    return field;
-  }
-*/
-  function takeRandomFromArray(array) {
-    var randomIndex = _.random(0, array.length - 1);
-    var item = array[randomIndex];
-    array.splice(randomIndex, 1);
-    return item;
-  }
 };

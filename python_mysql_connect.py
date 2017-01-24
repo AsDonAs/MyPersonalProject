@@ -59,7 +59,7 @@ def user_in_db(user):
         user_in = (user,)
         query = """SELECT *
                    FROM users
-                   WHERE user_name = %s"""
+                   WHERE BINARY user_name = %s"""
 
         dbconfig = read_db_config()
         conn = MySQLConnection(**dbconfig)
@@ -87,7 +87,7 @@ def update_secret_key(user_name, new_data):
         user_in = (new_data, user_name)
         query = """UPDATE users
                    SET user_secret_key = %s
-                   WHERE user_name = %s"""
+                   WHERE BINARY user_name = %s"""
 
         dbconfig = read_db_config()
         conn = MySQLConnection(**dbconfig)
@@ -110,7 +110,7 @@ def user_pass_in_db(user):
         user_in = (user,)
         query = """SELECT user_password
                    FROM users
-                   WHERE user_name = %s"""
+                   WHERE BINARY user_name = %s"""
 
         dbconfig = read_db_config()
         conn = MySQLConnection(**dbconfig)
@@ -138,7 +138,7 @@ def user_sec_key_in_db(user):
         user_in = (user,)
         query = """SELECT user_secret_key
                    FROM users
-                   WHERE user_name = %s"""
+                   WHERE BINARY user_name = %s"""
 
         dbconfig = read_db_config()
         conn = MySQLConnection(**dbconfig)
@@ -232,11 +232,7 @@ def top_results_in_db(how_many_results):
             top_list.append(this_result)
             row = cursor.fetchone()
 
-        if count == 1:
-            tuple_top_list = (top_list,)
-            return tuple_top_list
-        else:
-            return tuple(top_list)
+        return tuple(top_list)
         
     except Error as e:
         print(e)

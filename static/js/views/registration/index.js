@@ -68,8 +68,8 @@ RegistrationView.prototype._setEvents = function() {
 };
 
 
-// request_settings = {"0": save_user, "1": login_user, "2": save_result,\
-// "4": get_result, "9": secret_key_name}
+// request_settings = {"0": save_user, "1": login_user,\
+//                    "2": save_result, "4": get_result}
 RegistrationView.prototype._onClickActionButton = function(optionName) {
   console.log('click button', optionName);
 

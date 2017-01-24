@@ -1,4 +1,11 @@
 $(function() {
+  errors = {'Name in base.' : "Пользователь с таким именем уже существует.",
+  			'Wrong password.' : "Неправильный пароль.",
+  			'User not register.' : "Пользователь с таким именем не зарегистрирован.",
+  			"Wrong secret key!" : "Неверный секретный ключ.",
+  			'Bad size of field!' : "Неверный размер поля."
+  };
+
   window.finderOfTwo = {
     templates: loadTemplates()
   };
@@ -33,7 +40,15 @@ window.sendRequest = function(data, onSuccess, onError) {
         onSuccess(data);
       }
     },
-    error: function() {
+    error: function(text) {
+      errorName = text.statusText;
+      if (errorName in errors) {
+      	alert(errors[errorName]);
+      }
+      else {
+        alert(errorName);
+      }
+      console.log(text.statusText in errors);
       onSuccess();
       console.error('AJAX ERROR', arguments);
     }
@@ -72,6 +87,7 @@ function onEndGame(gameDurationMs) {
 
 function onSaveResults(results_top) {
   window.finderOfTwo.results_top = results_top;
+  window.finderOfTwo.len_results = results_top.length;
 };
 
 // also delete from page

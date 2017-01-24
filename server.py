@@ -1,4 +1,5 @@
-# This is an example of how to start a simple HTTP server (using Python 3.x).
+# Version 1.0.0
+# Main module for project.
 
 from http.server import HTTPServer, CGIHTTPRequestHandler
 import os
@@ -11,34 +12,32 @@ import json
 from python_mysql_connect import *
 
 
-def gen_secret_key():
-    secret_key = str(random.random())[2:]
-    return secret_key
-
 
 def create_secret_key(name):
+    def gen_secret_key():
+        secret_key = str(random.random())[2:]
+        return secret_key
+
     secret_key = gen_secret_key()
     update_secret_key(name, secret_key)
     field = gen_field(5, 4)
     return {"secret_key": secret_key, "field": field}
 
 
-def gen_help_for_field(field_x, field_y):
-    help_field = ["-" for i in range(field_x * field_y)]
-    return help_field
-
-
-def gen_items_for_field(max_item_field):
-    items_field = [i for i in range(max_item_field)] * 2
-    return items_field
-
-
 def gen_field(field_x, field_y):
+    def gen_help_for_field(field_x, field_y):
+        help_field = ["-" for i in range(field_x * field_y)]
+        return help_field
+
+    def gen_items_for_field(max_item_field):
+        items_field = [i for i in range(max_item_field)] * 2
+        return items_field
+
     end_field = gen_help_for_field(field_x, field_y)
     num_items = field_x * field_y
 
     if num_items % 2 == 1:
-        raise "Bad len of field!"
+        raise Exception("Bad size of field!")
     else:
         this_items = gen_items_for_field(num_items//2)
         
@@ -46,17 +45,15 @@ def gen_field(field_x, field_y):
             item_num = random.randint(0, (len(this_items)-1))
             end_field[i] = this_items[item_num]
             del(this_items[item_num])
-
+            
         return end_field
-
-
 
 
 def save_user(form):
     name = form["name"]
     password = form["password"]
     if user_in_db(name):
-        raise "Name in base."
+        raise Exception("Name in base.")
     else:
         add_new_db_user(name, password, "None")
         return create_secret_key(name)
@@ -69,10 +66,10 @@ def login_user(form):
         if password == user_pass_in_db(name):
             return create_secret_key(name)
         else:
-            raise WrongPass("Wrong password.")
+            raise Exception("Wrong password.")
     else:
-        raise UserNotRegister("User not register.")
-    
+        raise Exception("User not register.")
+
 
 def save_result(form):
     name = form["name"]
@@ -81,33 +78,17 @@ def save_result(form):
 
     if secret_key == user_sec_key_in_db(name):   
         add_new_result(name, result)
-        return print_db_results()
+        return None
     else:
-        raise SecretKeyWrong("Secret key is wrong!")
+        raise Exception("Wrong secret key!")
 
 
 def get_result(form):
     return {"results_top": top_results_in_db(10)}
 
-'''
-def get_result(db, form):
-    return db["results"]
 
-def secret_key_name(db, form):
-    name = form["name"]
-    return db["users_secret_key"]
-
-
-
-my_db = {}
-my_db["users"] = {}
-my_db["results"] = {}
-my_db["users_secret_key"] = {}
-'''
-
-request_settings = {"0": save_user, "1": login_user, "2": save_result, "4": get_result}#,\
-#                    "4": get_result, "9": secret_key_name}
-
+request_settings = {"0": save_user, "1": login_user,\
+                    "2": save_result, "4": get_result}
 
 curdir = os.path.dirname(os.path.abspath(__file__))
 
@@ -119,7 +100,6 @@ class HttpHandler(CGIHTTPRequestHandler):
             
         print("Self.path:  ", self.path, "You have GET send!")
         
-
         try:
             #Check the file extension required and
             #set the right mime type
@@ -155,6 +135,7 @@ class HttpHandler(CGIHTTPRequestHandler):
         except IOError:
             self.send_error(404, "File Not Found: %s" % self.path)
 
+
     def do_POST(self):
         print("My POST request!")
         
@@ -163,16 +144,14 @@ class HttpHandler(CGIHTTPRequestHandler):
             post_data = self.rfile.read(content_length)
             post_data = post_data.decode("utf-8")    
             form = json.loads(post_data)
-            
-            request_type = form["type"] #request_type
 
+            request_type = form["type"] #request_type
             response = 0
-            
+
             if request_type in request_settings.keys():
                 response = request_settings[request_type](form)
             else:
-                raise "Requset type not register! Something went wrong!"
-
+                raise Exception("Requset type not register! Something went wrong!")
 
             print("This form: ", form,\
                 "  Reques type: ", request_type,\
@@ -185,14 +164,13 @@ class HttpHandler(CGIHTTPRequestHandler):
             response = json.dumps(response).encode("utf-8")
             
             self.wfile.write(response)         
-        except:
+        except Exception as error:
             for item in traceback.format_exception(*sys.exc_info()):
                 print(item)
-            self.send_error(500)
-
-        
+            self.send_error(500, error.args[0])
 
 
+# Port for connection
 port = 8000
 
 try:

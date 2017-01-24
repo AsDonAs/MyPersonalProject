@@ -1,8 +1,6 @@
 function ResultsView() {
   this.$el = $(window.finderOfTwo.templates.results());
 
-
-
   this.isWaitingResponse = false;
 
   this.onResultsCallback = null;
@@ -12,10 +10,6 @@ function ResultsView() {
   this.RESULTS_SIZE = [3, 10];
 
   this.resultsField = this.GenField(this.RESULTS_SIZE);
-
-//  this.resultsField = this.processingResults(this.RESULTS_SIZE);
-
-//  this.render($('#content'));
 }
 
 
@@ -28,12 +22,10 @@ ResultsView.prototype.afterEndGame = function(){
     type: '4'
   }, this._onResponse);
 
- // this.$el.find('.waitingContainer').html('waiting...');
   this.isWaitingResponse = true;
 };
 
 ResultsView.prototype.showResults = function(results_top) {
-//  console.log(results_top, " ininin");
   this.resultsField = this.processingResults(this.RESULTS_SIZE);
   this.render($('#content'));
 };
@@ -76,6 +68,8 @@ ResultsView.prototype.processingResults = function(size) {
   resultsField = [];
 
   top_results = window.finderOfTwo.results_top;
+  this.RESULTS_SIZE[1] = window.finderOfTwo.len_results;
+  size[1] = this.RESULTS_SIZE[1];
 
   console.log(top_results);
   
@@ -108,7 +102,6 @@ ResultsView.prototype.GenField = function(size) {
 
 ResultsView.prototype._onResponse = function(response) {
   this.isWaitingResponse = false;
-//  this.$el.find('.waitingContainer').html('');
   if (typeof this.onResultsCallback === 'function') {
     this.onResultsCallback(response.results_top);
     this.showResults(window.finderOfTwo.results_top);
